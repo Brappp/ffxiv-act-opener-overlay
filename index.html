@@ -1,18 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <title>FFXIV Skill Overlay</title>
-</head>
-<body>
-    <div id="configUI">
-        <input type="file" id="imageLoader" multiple accept="image/*">
-        <div id="imageList"></div>
-        <button onclick="saveConfiguration()">Save Configuration</button>
-    </div>
-    
-    <script src="script.js"></script>
-</body>
-</html>
+<!-- Job Selection Dropdown -->
+<div id="jobSelection">
+    <label for="jobSelector">Select Job:</label>
+    <select id="jobSelector" onchange="loadSkillsForJob(this.value)">
+        <option value="">--Select a Job--</option>
+        <!-- Job options will be populated here -->
+    </select>
+</div>
+
+<!-- Draggable Skill List -->
+<div id="skillList">
+    <!-- Skills will be dynamically loaded here -->
+</div>
+
+<!-- User Ordered Skills -->
+<div id="orderedSkills">
+    <p>Drag and drop skills here in the order you want:</p>
+    <!-- Users drag skills here -->
+</div>
+
+<!-- Configuration Management -->
+<div id="configManagement">
+    <input type="text" id="configName" placeholder="Configuration Name">
+    <button onclick="saveConfiguration()">Save</button>
+    <button onclick="loadConfiguration()">Load</button>
+    <button onclick="deleteConfiguration()">Delete</button>
+</div>
+
+<script src="script.js"></script>

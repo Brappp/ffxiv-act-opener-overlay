@@ -1,119 +1,60 @@
-/* General styles */
 body {
-    margin: 0;
-    padding: 0;
     font-family: Arial, sans-serif;
-}
-
-/* Configuration UI section */
-#configUI {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-bottom: 1px solid #ccc;
-}
-
-#configUI input[type=file] {
-    margin-bottom: 10px;
-}
-
-#configUI button {
-    padding: 10px 20px;
-    background-color: #0066cc;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-#configUI button:hover {
-    background-color: #0056b3;
-}
-
-/* Image list and draggable items */
-#imageList {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    background-color: #f4f4f4;
+    margin: 0;
     padding: 10px;
+}
+
+#jobSelection {
+    margin-bottom: 20px;
+}
+
+#jobSelector {
+    padding: 5px;
+    border-radius: 4px;
     border: 1px solid #ccc;
-    min-height: 100px; /* So the area is visible even when empty */
-    align-items: center; /* Align images vertically */
-    justify-content: center; /* Center images horizontally */
-    background-color: #fff;
+}
+
+#skillList, #orderedSkills {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 20px;
+    min-height: 50px;
+    background-color: white;
 }
 
 .draggable {
-    width: 100px; /* Fixed size for draggable items */
-    height: 100px; /* Fixed height for draggable items */
+    padding: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 5px;
     cursor: grab;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-size: cover;
-    background-position: center;
+    background-color: #e4e4e4;
 }
 
-.draggable:active {
-    cursor: grabbing;
+.draggable.dragging {
+    opacity: 0.5;
 }
 
-/* Carousel styles */
-.carousel-container {
-    position: relative;
-    width: 100%;
-    margin: auto;
-    overflow: hidden;
+#configManagement {
+    margin-top: 20px;
 }
 
-.carousel-track {
-    display: flex;
-    transition: transform 0.5s ease;
+#configName {
+    padding: 5px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-.carousel-item {
-    user-select: none;
-    pointer-events: none;
-}
-
-/* Arrows for navigation */
-.arrow {
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
+button {
     padding: 10px;
-    border-radius: 30px;
-    user-select: none;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    background-color: #007bff;
+    color: white;
 }
 
-.arrow.left {
-    left: 10px;
-}
-
-.arrow.right {
-    right: 10px;
-}
-
-.arrow:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-}
-
-/* Media queries for responsive design */
-@media (max-width: 768px) {
-    .draggable {
-        width: 80px;
-        height: 80px;
-    }
-}
-
-@media (max-width: 480px) {
-    .draggable {
-        width: 60px;
-        height: 60px;
-    }
-
-    .arrow {
-        padding: 5px;
-    }
+button:hover {
+    background-color: #0056b3;
 }

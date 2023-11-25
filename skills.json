@@ -1,0 +1,27 @@
+{
+    "Paladin": {
+        "skills": [
+            { "name": "Fast Blade", "imageSrc": "src/paladin/fast_blade.jpg" },
+            { "name": "Riot Blade", "imageSrc": "src/paladin/riot_blade.jpg" },
+            { "name": "Royal Authority", "imageSrc": "src/paladin/royal_authority.jpg" }
+            // ... more Paladin skills
+        ]
+    },
+    "Warrior": {
+        "skills": [
+            { "name": "Heavy Swing", "imageSrc": "src/warrior/heavy_swing.jpg" },
+            { "name": "Maim", "imageSrc": "src/warrior/maim.jpg" },
+            { "name": "Storm's Eye", "imageSrc": "src/warrior/storms_eye.jpg" }
+            // ... more Warrior skills
+        ]
+    },
+    "White Mage": {
+        "skills": [
+            { "name": "Cure", "imageSrc": "src/white_mage/cure.jpg" },
+            { "name": "Medica", "imageSrc": "src/white_mage/medica.jpg" },
+            { "name": "Holy", "imageSrc": "src/white_mage/holy.jpg" }
+            // ... more White Mage skills
+        ]
+    }
+    // ... more jobs
+}

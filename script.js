@@ -1,111 +1,125 @@
-// Initialize the image configuration array
-let imageConfig = loadConfiguration() || [];
+document.addEventListener('DOMContentLoaded', () => {
+  initializeJobs();
+});
 
-// Event listener for the file input change event
-document.getElementById('imageLoader').addEventListener('change', handleImageUpload, false);
+function initializeJobs() {
+  const jobSelector = document.getElementById('jobSelector');
+  const jobs = ['Paladin', 'Warrior', 'Dark Knight', 'Gunbreaker', /* ... more jobs ... */];
 
-// Handle image file uploads
-function handleImageUpload(event) {
-  const files = event.target.files;
-  for (const file of files) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      // Push the image data into the configuration array
-      imageConfig.push(e.target.result);
-      // Update the UI to reflect the new list of images
-      updateImageList();
-    };
-    reader.readAsDataURL(file); // Convert the file to a data URL
-  }
+  jobs.forEach(job => {
+      const option = document.createElement('option');
+      option.value = job;
+      option.textContent = job;
+      jobSelector.appendChild(option);
+  });
 }
 
-// Update the image list UI
-function updateImageList() {
-  const imageList = document.getElementById('imageList');
-  imageList.innerHTML = ''; // Clear out the current list
+function loadSkillsForJob(jobName) {
+  // Placeholder: Replace with actual logic to load skills for the selected job
+  const skills = ['Skill1', 'Skill2', 'Skill3']; // Example skills
+  const skillList = document.getElementById('skillList');
+  skillList.innerHTML = '';
 
-  imageConfig.forEach((imageSrc, index) => {
-    const img = document.createElement('img');
-    img.src = imageSrc;
-    img.classList.add('draggable');
-    img.dataset.index = index;
-    img.style.backgroundImage = `url(${imageSrc})`; // Set the image as the background
-    imageList.appendChild(img);
+  skills.forEach(skill => {
+      const skillDiv = document.createElement('div');
+      skillDiv.className = 'draggable';
+      skillDiv.draggable = true;
+      skillDiv.textContent = skill;
+      skillList.appendChild(skillDiv);
   });
 
-  // Re-initialize the drag-and-drop functionality
-  makeListDraggable();
+  makeSkillsDraggable();
 }
 
-// Make the list of images draggable
-function makeListDraggable() {
+function makeSkillsDraggable() {
   const draggables = document.querySelectorAll('.draggable');
-  const container = document.getElementById('imageList');
+  const containers = [document.getElementById('skillList'), document.getElementById('orderedSkills')];
 
   draggables.forEach(draggable => {
-    draggable.addEventListener('dragstart', (e) => {
-      draggable.classList.add('dragging');
-      e.dataTransfer.setData('text/plain', draggable.dataset.index);
-    });
+      draggable.addEventListener('dragstart', () => {
+          draggable.classList.add('dragging');
+      });
 
-    draggable.addEventListener('dragend', () => {
-      draggable.classList.remove('dragging');
-    });
+      draggable.addEventListener('dragend', () => {
+          draggable.classList.remove('dragging');
+      });
   });
 
-  container.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    const afterElement = getDragAfterElement(container, e.clientY);
-    const draggable = document.querySelector('.dragging');
-    if (afterElement == null) {
-      container.appendChild(draggable);
-    } else {
-      container.insertBefore(draggable, afterElement);
-    }
-  });
-
-  container.addEventListener('drop', (e) => {
-    const index = e.dataTransfer.getData('text/plain');
-    const draggable = document.querySelector(`[data-index="${index}"]`);
-    const afterElement = getDragAfterElement(container, e.clientY);
-    const newIndex = afterElement ? afterElement.dataset.index : imageConfig.length;
-    moveArrayItem(imageConfig, index, newIndex);
-    updateImageList(); // Update the list to reflect the new order
+  containers.forEach(container => {
+      container.addEventListener('dragover', event => {
+          event.preventDefault();
+          const afterElement = getDragAfterElement(container, event.clientY);
+          const draggable = document.querySelector('.dragging');
+          if (afterElement == null) {
+              container.appendChild(draggable);
+          } else {
+              container.insertBefore(draggable, afterElement);
+          }
+      });
   });
 }
 
-// Utility function to move an item in an array from one index to another
-function moveArrayItem(arr, from, to) {
-  const item = arr.splice(from, 1)[0];
-  arr.splice(to, 0, item);
-}
-
-// Function to save the configuration to local storage
-function saveConfiguration() {
-  localStorage.setItem('imageConfig', JSON.stringify(imageConfig));
-  alert('Configuration saved!');
-}
-
-// Function to load the configuration from local storage
-function loadConfiguration() {
-  const savedConfig = localStorage.getItem('imageConfig');
-  return savedConfig ? JSON.parse(savedConfig) : [];
-}
-
-// Get the draggable element after which the current dragging element should be placed
 function getDragAfterElement(container, y) {
   const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
 
   return draggableElements.reduce((closest, child) => {
-    const box = child.getBoundingClientRect();
-    const offset = y - box.top - box.height / 2;
-    if (offset < 0 && offset > closest.offset) {
-      return { offset: offset, element: child };
-    } else {
-      return closest;
-    }
+      const box = child.getBoundingClientRect();
+      const offset = y - box.top - box.height / 2;
+      if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child };
+      } else {
+          return closest;
+      }
   }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
 
-// Initialize the list on page load
-updateImageList();
+function saveConfiguration() {
+  const configName = document.getElementById('configName').value;
+  const skillOrders = Array.from(document.querySelectorAll('#orderedSkills .draggable')).map(el => el.textContent);
+  const configData = {
+      job: document.getElementById('jobSelector').value,
+      skillOrders
+  };
+
+  localStorage.setItem(configName, JSON.stringify(configData));
+  alert('Configuration saved!');
+}
+
+function loadConfiguration() {
+  const configName = document.getElementById('configName').value;
+  const configData = JSON.parse(localStorage.getItem(configName));
+
+  if (!configData) {
+      alert('Configuration not found.');
+      return;
+  }
+
+  document.getElementById('jobSelector').value = configData.job;
+  loadSkillsForJob(configData.job);
+
+  setTimeout(() => {
+      reorderSkillsBasedOnConfig(configData.skillOrders);
+  }, 100); // Adjust timeout as needed
+}
+
+function deleteConfiguration() {
+  const configName = document.getElementById('configName').value;
+  localStorage.removeItem(configName);
+  alert('Configuration deleted!');
+}
+
+function reorderSkillsBasedOnConfig(savedSkillOrders) {
+  const skillList = document.getElementById('skillList');
+  const orderedSkills = document.getElementById('orderedSkills');
+  orderedSkills.innerHTML = '';
+
+  savedSkillOrders.forEach(savedSkill => {
+      const skillElement = Array.from(skillList.children).find(el => el.textContent.trim() === savedSkill);
+
+      if (skillElement) {
+          orderedSkills.appendChild(skillElement.cloneNode(true));
+      }
+  });
+
+  makeSkillsDraggable();
+}
